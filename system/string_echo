@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=""
+
+if [ $# -ne 1 ]; then
+    echo "usage: $0 str"
+    exit 1
+fi
+
+str=$1
+
+
+source functional-shell-mem.bash
+
+path=`object_path_of_type $1 string`
+
+cat $path

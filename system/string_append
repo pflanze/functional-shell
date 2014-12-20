@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=""
+
+args=($@)
+
+source functional-shell-mem.bash
+
+cont () {
+    object=$1
+    path=$2
+
+    {
+	for obj in ${args[@]}; do
+	    p=`object_path_of_type $obj string`
+	    cat $p
+	done
+    } > "$path"
+
+    echo $object
+}
+
+alloc_file string cont
+

@@ -91,7 +91,7 @@ genid () {
     set -euo pipefail
     # XXX concurrency
     local id
-    id=`cat $MEM/id`
+    id=$(< $MEM/id)
     local id2
     id2=$(( $id + 1 ))
     echo $id2 > $MEM/id

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=""
+
+source functional-shell-mem.bash
+
+type=`object_type $1`
+
+[ $type = pair ]
+

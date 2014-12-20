@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=""
+
+# keep in sync with nil
+
+source functional-shell-mem.bash
+
+type=`object_type $1`
+
+[ $type = null ]
+

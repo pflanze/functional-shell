@@ -53,11 +53,12 @@ id_path () {
     echo $MEM/cur/$1
 }
 
-# # object -> type
-# object_type () {
-#     __object_regex_match $1
-#     echo $__type
-# }
+# object -> type
+object_type () {
+    set -euo pipefail
+    __object_regex_match $1
+    echo $__type
+}
 
 # # object -> unsafevalue
 # object_unsafevalue () {

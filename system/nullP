@@ -1,13 +1,14 @@
 #!/bin/bash
 
 set -euo pipefail
-IFS=""
+IFS=
+# remember, *still* need to quote variables!
 
 # keep in sync with nil
 
 source functional-shell-mem.bash
 
-type=`object_type $1`
+type=`object_type "$1"`
 
-[ $type = null ]
+[ "$type" = null ]
 

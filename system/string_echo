@@ -1,7 +1,8 @@
 #!/bin/bash
 
 set -euo pipefail
-IFS=""
+IFS=
+# remember, *still* need to quote variables!
 
 if [ $# -ne 1 ]; then
     echo "usage: $0 str" >&2
@@ -13,6 +14,6 @@ str=$1
 
 source functional-shell-mem.bash
 
-path=`object_path_of_type $1 string`
+path=`object_path_of_type "$1" string`
 
-cat $path
+cat "$path"

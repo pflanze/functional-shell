@@ -1,14 +1,15 @@
 #!/bin/bash
 
 set -euo pipefail
-IFS=""
+IFS=
+# remember, *still* need to quote variables!
 
 if [ $# -ne 1 ]; then
     echo "usage: $0 bashstring" >&2
     exit 1
 fi
 
-str=$1
+str="$1"
 
 
 source functional-shell-mem.bash
@@ -16,12 +17,12 @@ source functional-shell-mem.bash
 
 # object, path -> object
 cont () {
-    object=$1
-    path=$2
+    object="$1"
+    path="$2"
     
-    echo -n $str > $path
+    echo -n "$str" > "$path"
 
-    echo $object
+    echo "$object"
 }
 
 alloc_file string cont

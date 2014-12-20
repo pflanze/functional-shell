@@ -1,7 +1,8 @@
 #!/bin/bash
 
 set -euo pipefail
-IFS=""
+IFS=
+# remember, *still* need to quote variables!
 
 if [ $# -ne 0 ]; then
     {
@@ -15,13 +16,13 @@ fi
 
 # keep in sync with functional-shell-mem.bash  !
 
-mkdir -p $MEM $MEM/{a,b}
+mkdir -p "$MEM" "$MEM/"{a,b}
 
-if [ ! -L $MEM/cur ]; then
-    ln -s a $MEM/cur
+if [ ! -L "$MEM/cur" ]; then
+    ln -s a "$MEM/cur"
 fi
 
-if [ ! -e $MEM/id ]; then
-    echo 0 > $MEM/id
+if [ ! -e "$MEM/id" ]; then
+    echo 0 > "$MEM/id"
 fi
 

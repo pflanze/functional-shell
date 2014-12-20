@@ -1,24 +1,25 @@
 #!/bin/bash
 
 set -euo pipefail
-IFS=""
+IFS=
+# remember, *still* need to quote variables!
 
-args=($@)
+args=("$@")
 
 source functional-shell-mem.bash
 
 cont () {
-    object=$1
-    path=$2
+    object="$1"
+    path="$2"
 
     paths=()
-    for obj in ${args[@]}; do
-	paths+=(`object_path_of_type $obj string`)
+    for obj in "${args[@]}"; do
+	paths+=(`object_path_of_type "$obj" string`)
     done
 
-    cat ${paths[@]} > "$path"
+    cat "${paths[@]}" > "$path"
 
-    echo $object
+    echo "$object"
 }
 
 alloc_file string cont

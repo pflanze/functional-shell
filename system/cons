@@ -1,7 +1,8 @@
 #!/bin/bash
 
 set -euo pipefail
-IFS=""
+IFS=
+# remember, *still* need to quote variables!
 
 if [ $# -ne 2 ]; then
     echo "usage: $0 a b" >&2
@@ -11,4 +12,4 @@ fi
 
 source functional-shell-mem.bash
 
-alloc_record pair car $1 cdr $2
+alloc_record pair car "$1" cdr "$2"

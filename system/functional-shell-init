@@ -4,9 +4,11 @@ set -euo pipefail
 IFS=""
 
 if [ $# -ne 0 ]; then
-    echo "usage: $0"
-    echo "  Initializes a memory region. Needs MEM to be set to the base"
-    echo "  path where the region should live."
+    {
+	echo "usage: $0"
+	echo "  Initializes a memory region. Needs MEM to be set to the base"
+	echo "  path where the region should live."
+    } >&2
     exit 1
 fi
 

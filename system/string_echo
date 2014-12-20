@@ -4,7 +4,7 @@ set -euo pipefail
 IFS=""
 
 if [ $# -ne 1 ]; then
-    echo "usage: $0 str"
+    echo "usage: $0 str" >&2
     exit 1
 fi
 

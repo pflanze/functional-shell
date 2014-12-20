@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=""
+
+
+source functional-shell-mem.bash
+# just for error
+
+
+
+a=`string hello`
+b=`string 'nice world'`
+
+[ `string_echo $a` = hello ] || error 1
+
+c=$(string_append $a $(string ' ') $b)
+
+[ `string_echo $c` = "hello nice world" ] || error 2
+
+echo Ok.

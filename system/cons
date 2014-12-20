@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=""
+
+if [ $# -ne 2 ]; then
+    echo "usage: $0 a b"
+    exit 1
+fi
+
+
+source functional-shell-mem.bash
+
+alloc_record pair car $1 cdr $2

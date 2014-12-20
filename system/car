@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=""
+
+if [ $# -ne 1 ]; then
+    echo "usage: $0 ptr"
+    exit 1
+fi
+
+
+source functional-shell-mem.bash
+
+path=`object_path_of_type $1 pair`
+
+cat $path/car
+

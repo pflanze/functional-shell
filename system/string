@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=""
+
+if [ $# -ne 1 ]; then
+    echo "usage: $0 bashstring"
+    exit 1
+fi
+
+str=$1
+
+
+source functional-shell-mem.bash
+
+
+# object, path -> object
+cont () {
+    object=$1
+    path=$2
+    
+    echo -n $str > $path
+
+    echo $object
+}
+
+alloc_file string cont
+

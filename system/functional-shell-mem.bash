@@ -87,17 +87,14 @@ object_path_of_type () {
 }
 
 
+id_path=`dirname "$0"`/id-server.fifo
 
 # () -> id
 genid () {
     set -euo pipefail
-    # XXX concurrency
     local id
-    id=$(< "$MEM/id")
-    local id2
-    id2=$(( $id + 1 ))  # *can't* quote $id here. Bash is crazy.
-    echo "$id2" > "$MEM/id"
-    echo "$id2"
+    read -n 20 id < "$id_path"
+    echo "$id"
 }
 
 # type, {fieldname, fieldvalue} ...  -> object

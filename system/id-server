@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=
+# remember, *still* need to quote variables!
+
+
+path=$0.fifo
+
+
+if [ ! -e "$path" ]; then
+    (
+	umask 077
+	mkfifo "$path"
+    )
+fi
+
+
+{
+    while true; do
+	cat > "$path" || true
+    done
+} < <(
+    base64 < /dev/urandom | perl -wne 'chomp; tr {/+-}{___}; print or die $!'
+)
+
+

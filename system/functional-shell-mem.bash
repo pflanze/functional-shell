@@ -66,6 +66,7 @@ object_type () {
 #     __object_regex_match "$1"
 #     echo "$__unsafevalue"
 # }
+# see object_value_of_type for type-checking variant
 
 # object -> id
 object_id () {
@@ -84,6 +85,14 @@ object_path_of_type () {
     __object_regex_match "$1"
     [ "$__type" = "$2" ] || error "not a $2 object: $1"
     id_path "$__unsafevalue"
+}
+
+# object, type -> value
+immediateobject_echo_of_type () {
+    set -euo pipefail
+    __object_regex_match "$1"
+    [ "$__type" = "$2" ] || error "not a $2 object: $1"
+    echo "$__unsafevalue"
 }
 
 

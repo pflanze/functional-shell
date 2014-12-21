@@ -12,8 +12,4 @@ fi
 
 source functional-shell-mem.bash
 
-path=`object_path_of_type "$1" number`
-
-val=$(< "$path")
-
-echo "$val"
+immediateobject_echo_of_type "$1" number

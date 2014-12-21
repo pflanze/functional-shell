@@ -60,19 +60,25 @@ while (1) {
     my $len = read $in, $buf, $id_size;
     defined $len or die "read urandom: $!";
     $len == $id_size or die "only got $len bytes";
-    eval {
-	$len= syswrite $out, join('', map {
-	    my $i= ord $_;
-	    my $hi= $i >> 4;
-	    my $lo= $i & 15;
-	    $hexdigits[$hi].$hexdigits[$lo]
-	} split //, $buf);
-	defined $len or die "write fifo: $!";
-	$len == 2*$id_size or die "only wrote $len bytes";
-	1
-    } || do {
-	warn "note: $@";
-    };
+  WRITE: {
+	eval {
+	    $len= syswrite $out, join('', map {
+		my $i= ord $_;
+		my $hi= $i >> 4;
+		my $lo= $i & 15;
+		$hexdigits[$hi].$hexdigits[$lo]
+	    } split //, $buf);
+	    defined $len or die "write fifo: $!";
+	    $len == 2*$id_size or die "only wrote $len bytes";
+	    1
+	} || do {
+	    warn "note: $@"
+	      unless $@=~ /broken pipe/;
+	    close $out;
+	    openout;
+	    redo WRITE;
+	};
+    }
     # reopen output even in success case, because it's normally
     # guaranteed that the next write would fail since the client
     # should be done by then.

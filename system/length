@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=
+# remember, *still* need to quote variables!
+
+if [ $# -ne 1 ]; then
+    echo "usage: $0 list" >&2
+    exit 1
+fi
+
+
+source functional-shell-mem.bash
+
+
+# recursive:
+
+length () {
+    if nullP "$1"; then
+	echo 0
+    else
+	echo $(( 1 + $(length "$(cdr "$1")") ))
+    fi
+}
+
+length "$1"

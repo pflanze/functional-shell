@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=
+# remember, *still* need to quote variables!
+
+#echo "usage: $0 objects..." >&2
+#echo "  create linked list from multiple arguments"
+
+
+source functional-shell-mem.bash
+
+# recursive:
+
+args=("$@")
+nargs=$#
+
+# index -> list
+list_rec () {
+    if [ $1 -lt $nargs ]; then
+	cons "${args[$1]}" "`list_rec $(( 1 + $1 ))`"
+    else
+	null
+    fi
+}
+
+list_rec 0

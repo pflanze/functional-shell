@@ -1,0 +1,80 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=
+# remember, *still* need to quote variables!
+
+if [ $# -ne 1 ]; then
+    echo "usage: $0 object" >&2
+    echo "  write object as an s-expression"
+    exit 1
+fi
+
+str="$1"
+
+
+source functional-shell-mem.bash
+
+
+# object, bash-boolean -> () / bash-string
+write_list () {
+    set -euo pipefail
+    if pairP "$1"; then
+	if [ "$2" = 1 ]; then
+	    echo -n " "
+	fi
+	write "`car "$1"`"
+	write_list "`cdr "$1"`" 1
+    elif nullP "$1"; then
+	true # nop
+    else
+	if [ "$2" = 1 ]; then
+	    echo -n " . "
+	fi
+	write "$1"
+    fi
+}
+
+write_number () {
+    set -euo pipefail
+    # simply strip the EOL; XX: not really conforming to s-expr 
+    local v
+    v=$(number_echo "$1")
+    echo -n "$v"
+}
+
+write_string () {
+    set -euo pipefail
+    # XXX well, was the EOL part of the string?
+    local v
+    v=$(string_echo "$1")
+    echo "$v" | perl -we '
+    local $/; $_=<STDIN>;
+     s/\\/\\\\/g;
+     s/"/\\"/g;
+     s/\n/\\n/g;
+     s/\r/\\r/g;
+     # XX more
+     print "\"$_\""
+     '
+}
+
+
+write () {
+    set -euo pipefail
+    if nullP "$1"; then
+	echo -n "'()"
+    elif pairP "$1"; then
+	echo -n "("
+	write_list "$1" 0
+	echo -n ")"
+    elif numberP "$1"; then
+	write_number "$1"
+    elif stringP "$1"; then
+	write_string "$1"
+    else
+	error "don't know how to write: '$1'"
+    fi
+}
+
+write "$1"

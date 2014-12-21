@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=""
+
+
+source functional-shell-mem.bash
+# just for error
+
+
+
+[ $(length $(null)) -eq 0 ] || error 1
+
+a=$(list $(number 10) $(number 20))
+
+[ $(length $a) -eq 2 ] || error 2
+
+astr=$(write $a)
+
+[ $astr = "(10 20)" ] || error "3: $astr"
+
+echo Ok.

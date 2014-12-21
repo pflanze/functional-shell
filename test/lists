@@ -19,4 +19,11 @@ astr=$(write $a)
 
 [ $astr = "(10 20)" ] || error "3: $astr"
 
+
+[ "$(write "$(map "$(code inc)" "$(list "$(number 10)" "$(number 20)")")")" \
+    = "(11 21)" ] || error 4
+
+[ "$(write "$(map "$(code dec)" "$(list "$(number -10)" "$(number 20)")")")" \
+    = "(-11 19)" ] || error 5
+
 echo Ok.

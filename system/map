@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=
+# remember, *still* need to quote variables!
+
+if [ $# -ne 2 ]; then
+    echo "usage: $0 fn lis" >&2
+    exit 1
+fi
+
+
+fn=$1
+lis=$2
+
+if nullP "$lis"; then
+    null
+else
+    a=$(car "$lis")
+    r=$(cdr "$lis")
+    r2=$(map "$fn" "$r")
+    v=$(call "$fn" "$a")
+    cons "$v" "$r2"
+fi

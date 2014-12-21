@@ -93,7 +93,7 @@ id_path=`dirname "$0"`/id-server.fifo
 genid () {
     set -euo pipefail
     local id
-    read -n 20 id < "$id_path"
+    read -N 40 id < "$id_path"
     echo "$id"
 }
 

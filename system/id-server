@@ -1,27 +1,82 @@
-#!/bin/bash
+#!/usr/bin/perl -w
 
-set -euo pipefail
-IFS=
-# remember, *still* need to quote variables!
+# Son Dez 21 00:30:06 CET 2014
+(my $email='ch%christianjaeger,ch')=~ tr/%,/@./;
+
+use strict; use warnings FATAL => 'uninitialized';
+
+our $id_size= 20; # bytes; should be kept in sync with
+                  # functional-shell-mem.bash for performance, right?
+
+$0=~ /(.*?)([^\/]+)\z/s or die "?";
+my ($mydir, $myname)=($1,$2);
+
+our $fifo_path= "$mydir/id-server.fifo";
+
+sub usage {
+    print STDERR map{"$_\n"} @_ if @_;
+    print "$myname
+
+  (Christian Jaeger <$email>)
+";
+exit (@_ ? 1 : 0);
+}
+
+use Getopt::Long;
+our $verbose=0;
+#our $opt_dry;
+GetOptions("verbose"=> \$verbose,
+	   "help"=> sub{usage},
+	   #"dry-run"=> \$opt_dry,
+	   ) or exit 1;
+usage if @ARGV;
 
 
-path=$0.fifo
+my @hexdigits= split //, "0123456789abcdef";
+
+umask 077;
+
+if (not -e $fifo_path) {
+    system "mkfifo", $fifo_path
+      or die "mkfifo '$fifo_path': exit code $?";
+}
+
+$SIG{PIPE}= 'IGNORE';
+
+open my $in, "< /dev/urandom"
+  or die "< '/dev/urandom': $!";
+
+my $out;
+
+sub openout {
+    open $out, ">", $fifo_path
+      or die "> '$fifo_path': $!";
+}
+
+openout;
+
+my $buf;
+while (1) {
+    my $len = read $in, $buf, $id_size;
+    defined $len or die "read urandom: $!";
+    $len == $id_size or die "only got $len bytes";
+    eval {
+	$len= syswrite $out, join('', map {
+	    my $i= ord $_;
+	    my $hi= $i >> 4;
+	    my $lo= $i & 15;
+	    $hexdigits[$hi].$hexdigits[$lo]
+	} split //, $buf);
+	defined $len or die "write fifo: $!";
+	$len == 2*$id_size or die "only wrote $len bytes";
+	1
+    } || do {
+	warn "note: $@";
+	close $out;
+	openout;
+    }
+}
 
 
-if [ ! -e "$path" ]; then
-    (
-	umask 077
-	mkfifo "$path"
-    )
-fi
-
-
-{
-    while true; do
-	cat > "$path" || true
-    done
-} < <(
-    base64 < /dev/urandom | perl -wne 'chomp; tr {/+-}{___}; print or die $!'
-)
-
-
+#use Chj::ruse;
+#use Chj::Backtrace; use Chj::repl; repl;

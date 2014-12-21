@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=
+# remember, *still* need to quote variables!
+
+if [ $# -ne 1 ]; then
+    echo "usage: $0 num" >&2
+    exit 1
+fi
+
+n=$(number_echo "$1")
+n2=$(( $n  - 1 )) # XXX number overflow
+number "$n2"

@@ -124,6 +124,101 @@ follows:
 See [[test/boxes]] for an example involving closures.
 
 
+## Problems
+
+Problems compared to some other "real" programming languages (like
+actual Scheme or other Lisps):
+
+* Bash offers no safe way around using double quotes around all
+  variable references (except in assignment context (is this actually
+  correct?)). `IFS=` is not enough in some cases (with empty strings
+  as values). This entails a permanent risk of omission with
+  possible implications for safety/security.
+
+  Although, when using tagged values throughout the whole application
+  (eliminating the empty string case) ditching the quotes might be
+  safe again. (Find out and report back.)
+
+* The only exception mechanism that bash offers is `set -euo
+  pipefail`, but this only works in the top level contexts of files
+  and function bodies, not in nested expressions. This means that for
+  exception propagation to work, one cannot use subexpressions, and
+  instead has to unnest them and assign temporary variables (basically
+  [static single assignment
+  form](https://en.wikipedia.org/wiki/Static_single_assignment_form)).
+  Worse, `local` inhibits the exception propagation, too (but only
+  from failing subcommands, not failing variable accesses, i.e. `set
+  -u` enforces termination whereas `set -e` doesn't; crazy). All of
+  this means that for example a function that can be written in Scheme
+  like
+
+        (define (map fn l)
+          (if (null? l)
+              '()
+              (cons (fn (car l)) 
+                    (map fn (cdr l)))))
+
+  becomes
+
+        map () {
+            set -euo pipefail
+            # ^ XX: necessary in every function? It was in some cases, 
+            #       I have not properly tracked this down though.
+            local fn="$1" # XX: is it a good idea to rely on set -u working
+            local l="$2"  #     through `local` in the future?
+            if nullP "$l"; then
+                local a
+                a=$(car "$l")
+                local v
+                v=$(call "$fn" "$a")
+                local r
+                r=$(cdr "$l")
+                local rr
+                rr=$(map "$fn" "$r")
+                cons "$v" "$rr"
+            else
+                null
+            fi
+        }
+
+  (Ok, the `r` intermediate variable could have been saved since
+  there's no possibility for `cdr` to be failing here. But, better be
+  consistent than smart.)
+
+  Alternatively, it could be written as:
+
+        map () {
+            set -euo pipefail
+            # ^ XX: necessary in every function? It was in some cases, 
+            #       I have not properly tracked this down though.
+            local fn="$1" # XX: is it a good idea to rely on set -u working
+            local l="$2"  #     through `local` in the future?
+            if nullP "$l"; then
+                local a=$(car "$l") || die
+                local v=$(call "$fn" "$a") || die
+                local r=$(cdr "$l") || die
+                local rr=$(map "$fn" "$r") || die
+                cons "$v" "$rr"
+            else
+                null
+            fi
+        }
+
+* The above actually clobbers exceptions happening in `nullP`. This
+  could be remedied by changing predicates to return booleans via
+  stdout instead of their exit code, which would also have the
+  advantage of being consistent with how values are returned
+  otherwise.  It will turn the above into:
+
+        map () {
+            set -euo pipefail
+            local fn="$1"
+            local l="$2"
+            local t=$(nullP "$l") || die
+            if is_true "$t"; then
+                ...
+
+
 ## Todo
 
 * implement map, filter: this is a good exercise

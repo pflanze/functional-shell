@@ -149,3 +149,23 @@ alloc_file () {
     "$cont" "$object" "$path"
 }
 
+
+# 'call' has to be a bash function so that code can be calls to
+# functions in the allocator's namespace; of course that's not safe
+# (pass a closure or code object to another script, it won't run the
+# intended effect there),
+
+call () {
+    local s
+    s="$1"
+    shift
+
+    if codeP "$s"; then
+	`code_echo "$s"` "$@"
+    elif closureP "$s"; then
+	`closure_code "$s"` "`closure_env "$s"`" "$@"
+    else
+	error "not of a callable type: $s"
+    fi
+
+}

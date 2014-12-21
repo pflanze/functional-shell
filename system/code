@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=
+# remember, *still* need to quote variables!
+
+if [ $# -ne 1 ]; then
+    echo "usage: $0 bashcodestring" >&2
+    echo "  usually bashcodestring would simply be the name of a"
+    echo "  function or executable"
+    exit 1
+fi
+
+str="$1"
+
+
+source functional-shell-mem.bash
+
+
+make_object code "$1"

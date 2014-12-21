@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=""
+
+
+source functional-shell-mem.bash
+# just for error
+
+
+[ "$(call "$(code echo)" 1  2 3)" = "1 2 3" ] || error 1
+
+
+foo () {
+    local env
+    env="$1"
+    shift
+
+    write "$env"
+    echo " then: $@"
+}
+
+e=$(list $(number 12) $(string "Hello"))
+c=$(closure foo "$e")
+
+[ "$(call "$c" some World)" = '(12 "Hello\n") then: some World' ] || error 2
+
+echo Ok.

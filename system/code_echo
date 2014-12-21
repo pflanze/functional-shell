@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=
+# remember, *still* need to quote variables!
+
+if [ $# -ne 1 ]; then
+    echo "usage: $0 str" >&2
+    exit 1
+fi
+
+str=$1
+
+
+source functional-shell-mem.bash
+
+immediateobject_echo_of_type "$1" code

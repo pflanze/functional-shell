@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=
+# remember, *still* need to quote variables!
+
+source functional-shell-mem.bash
+
+type=`object_type "$1"`
+
+[ "$type" = code ]
+

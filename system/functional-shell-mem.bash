@@ -87,7 +87,9 @@ object_path_of_type () {
 }
 
 
-id_path=`dirname "$0"`/id-server.fifo
+[[ "$0" =~ (.*/) ]]
+id_path=${BASH_REMATCH[1]}/id-server.fifo
+
 
 # () -> id
 genid () {

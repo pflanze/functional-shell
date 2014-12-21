@@ -64,10 +64,44 @@ trampolines, or more idiomatically, call the target 'function' as an
 external program using 'exec' (which is more uniform, too, but of
 course slower.)
 
+## Lambda and closures
+
+The Bash language does not offer closures, lexical variables, or local
+or anonymous functions. It does offer anonymous code as first-class
+values though (any string can be called as code reference (function or
+executable name), or using 'eval' even complete scripts, although
+*functional-shell* doesn't make use of the latter).
+
+Local functions (be it named or anonymous ones) in a functional
+language can refer to the lexical context; since there is no mechanism
+in bash to capture that context transparently, there's no way around
+doing that explicitely instead.
+
+So, the solution offered here is the following:
+
+* There's a `closure` data type, with `code` and `env` fields. `code`
+  is a reference to a bash function or executable, `env` can be
+  anything (it's basically like `void*` in C), `list` can be used to
+  bundle multiple values.
+
+* There's also a `code` data type, that only contains code and no env;
+  its purpose is (together with the `closure` type) to offer a super
+  type (a "callable") that generic functions can simply `call`
+
+* So, to create a closure instance, run e.g.:
+
+        cl=$(closure function_or_code_name "$(list "$val1" "$val2" "$val3")")
+
+* to call it, run e.g.:
+
+        call "$cl" "$val4" "$val5"
+
+  This has the same effect as running:
+
+        function_or_code_name "$(list "$val1" "$val2" "$val3")" "$val4" "$val5"
+
 
 ## Todo
-
-* implement lambda
 
 * implement map, filter: this is a good exercise
 

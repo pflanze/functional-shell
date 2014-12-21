@@ -64,9 +64,7 @@ while (1) {
 	eval {
 	    $len= syswrite $out, join('', map {
 		my $i= ord $_;
-		my $hi= $i >> 4;
-		my $lo= $i & 15;
-		$hexdigits[$hi].$hexdigits[$lo]
+		$hexdigits[$i >> 4].$hexdigits[$i & 15]
 	    } split //, $buf);
 	    defined $len or die "write fifo: $!";
 	    $len == 2*$id_size or die "only wrote $len bytes";

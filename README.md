@@ -29,8 +29,8 @@ with a pure source'ing approach.)
 
 4. `test/str`; `test/lists`
 
-5. read the code of the scripts in the [[test]] directory, then do
-   your own experiments...
+5. read the code of the scripts in the [test](test)
+   directory, then do your own experiments...
 
 
 ## Memory model
@@ -78,7 +78,7 @@ trampolines, or more idiomatically, call the target 'function' as an
 external program using 'exec' (which is more uniform, too, but of
 course slower.)
 
-For an example, see [[system/list_ref]].
+For an example, see [system/list_ref](system/list_ref).
 
 ## Lambda and closures
 
@@ -103,7 +103,7 @@ So, the solution offered here is the following:
 * There's also a `code` data type, that only contains code and no env;
   its purpose is (together with the `closure` type) to offer a super
   type (a "callable") that generic functions can simply `call`.
-  (Example: `map` usage in [[test/lists]].)
+  (Example: `map` usage in [test/lists](test/lists).)
 
 * So, to create a closure instance, run e.g.:
 
@@ -137,7 +137,8 @@ follows:
     set_box "$b", "$val2"
     unbox "$b" # prints $val2
 
-See [[test/boxes]] for an example involving closures.
+See [test/boxes](test/boxes) for an example involving
+closures.
 
 
 ## Problems

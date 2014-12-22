@@ -39,6 +39,7 @@ Currently implemented types:
     string   allocated  utf8-encoded string   string       string-value, string-path
     pair     allocated  pair of two objects   cons         car, cdr
     null     immediate  the empty list        null or nil  -
+    box      allocated  a mutable box         box          unbox, box_set
 
 Each type has a type predicate which is named after the type with a
 trailing 'P'.
@@ -99,6 +100,28 @@ So, the solution offered here is the following:
   This has the same effect as running:
 
         function_or_code_name "$(list "$val1" "$val2" "$val3")" "$val4" "$val5"
+
+### Mutation of variables
+
+Some of the languages that support first-class functions (and hence
+closures), and also allow mutations of variable bindings, for example
+Perl or Scheme, will make the mutations visible to all closures
+referring to the same bindings. Others, like Python, do not share the
+mutations between closures. Yet others (like ML or Haskell) don't
+offer mutation of bindings at all; ML offers boxes.
+
+There's no way to share variable mutations in Bash (again, they aren't
+even lexical variables, thus the life time of a variable binding can
+be shorter than the life time of one of our closures.) As a solution
+for cases where the algorithm asks for mutable bindings, a *box* data
+type is offered here. Instead of mutating variables directly, use as
+follows:
+
+    b=$(box "$val1")
+    set_box "$b", "$val2"
+    unbox "$b" # prints $val2
+
+See [[test/boxes]] for an example involving closures.
 
 
 ## Todo

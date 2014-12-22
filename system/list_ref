@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=
+# remember, *still* need to quote variables!
+
+if [ $# -ne 2 ]; then
+    echo "usage: $0 list number" >&2
+    exit 1
+fi
+
+source functional-shell-mem.bash
+
+
+# iterative and tail-call optimized (but slow :) )
+
+l=$1
+i=$2
+
+if zeroP "$i"; then
+    car "$l"
+else
+    l2=$(cdr "$l")
+    i2=$(dec "$i")
+    exec list_ref "$l2" "$i2"
+fi

@@ -26,4 +26,14 @@ astr=$(write $a)
 [ "$(write "$(map "$(code dec)" "$(list "$(number -10)" "$(number 20)")")")" \
     = "(-11 19)" ] || error 5
 
+v=$(list_ref "$a" "$(number 0)")
+vn=$(number_echo "$v")
+
+[ "$vn" -eq 10 ] || error 6
+
+v=$(list_ref "$a" "$(number 1)")
+vn=$(number_echo "$v")
+
+[ "$vn" -eq 20 ] || error 6
+
 echo Ok.

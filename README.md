@@ -252,5 +252,12 @@ Scheme or other Lisps):
 * implement delay, force, lazy list (stream) library
 
 * implement garbage collection (this will make the syntax even uglier
-  since it requires registration of all bindings)
+  since it requires registration of all bindings, which will be
+  instructive for understanding but very painful; perhaps a
+  memory-scanning approach can be used instead that linearly scans
+  process RAM by way of ptrace or /proc/$pid/mem for reference
+  strings, that should be neat if there's no superfluous retention of
+  such strings by bash or malloc, but that latter point may be an
+  issue)
+
 

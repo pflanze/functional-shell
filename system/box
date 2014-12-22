@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=
+# remember, *still* need to quote variables!
+
+if [ $# -ne 1 ]; then
+    echo "usage: $0 obj" >&2
+    exit 1
+fi
+
+obj="$1"
+
+
+source functional-shell-mem.bash
+
+
+# object, path -> object
+cont () {
+    object="$1"
+    path="$2"
+    
+    echo -n "$obj" > "$path"
+
+    echo "$object"
+}
+
+alloc_file box cont
+

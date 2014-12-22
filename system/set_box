@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=
+# remember, *still* need to quote variables!
+
+if [ $# -ne 2 ]; then
+    echo "usage: $0 box val" >&2
+    exit 1
+fi
+
+box=$1
+val=$2
+
+
+source functional-shell-mem.bash
+
+path=`object_path_of_type "$box" box`
+
+echo -n "$val" > "$path"

@@ -1,0 +1,68 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=""
+
+
+source functional-shell-mem.bash
+# just for error
+
+
+# Let's translate this Scheme program:
+
+# (define (counter n)
+#   (list (lambda ()
+#           n)
+#         (lambda ()
+#           (set! n (inc n)))))
+#
+# (define vs (counter 10))
+# (define refc (list-ref vs 0))
+# (define incc (list-ref vs 1))
+#
+# (or (= (refc) 10) (error 1))
+# (incc)
+# (or (= (refc) 11) (error 2))
+
+
+# to functional-shell:
+
+_counter_ref () {
+    set -euo pipefail
+    local env="$1"  # which we choose to be a single value, a box
+    unbox "$env"
+}
+
+_inc_counter () {
+    set -euo pipefail
+    local env="$1"
+    local v=$(unbox "$env") || die
+    local v2=$(inc "$v") || die
+    set_box "$env" "$v2"
+}
+
+counter () {
+    set -euo pipefail
+    local n="$1"
+    local b=$(box "$n") || die
+    local ref=$(closure _counter_ref "$b") || die
+    local inc=$(closure _inc_counter "$b") || die
+    list "$ref" "$inc"
+}
+
+
+vs=$(counter "$(number 10)")
+
+refc=$(list_ref "$vs" "$(number 0)")
+incc=$(list_ref "$vs" "$(number 1)")
+
+v=$(call "$refc")
+[ "$(number_echo "$v")" -eq 10 ] || error 1
+
+$(call "$incc")
+
+v=$(call "$refc")
+[ "$(number_echo "$v")" -eq 11 ] || error 2
+
+
+echo Ok.

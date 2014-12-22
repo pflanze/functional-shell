@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -euo pipefail
+IFS=
+# remember, *still* need to quote variables!
+
+if [ $# -ne 1 ]; then
+    echo "usage: $0 numberobject" >&2
+    exit 1
+fi
+
+
+source functional-shell-mem.bash
+
+n=$(immediateobject_echo_of_type "$1" number)
+
+[ "$n" -lt 0 ]

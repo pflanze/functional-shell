@@ -219,24 +219,15 @@ Scheme or other Lisps):
   there's no possibility for `cdr` to be failing here. But, better be
   consistent than smart.)
 
-  Alternatively, it could be written as:
+  Note that a style like
 
-        map () {
-            set -euo pipefail
-            # ^ XX: necessary in every function? It was in some cases, 
-            #       I have not properly tracked this down though.
-            local fn="$1" # XX: is it a good idea to rely on set -u working
-            local l="$2"  #     through `local` in the future?
-            if nullP "$l"; then
                 local a=$(car "$l") || die
-                local v=$(call "$fn" "$a") || die
-                local r=$(cdr "$l") || die
-                local rr=$(map "$fn" "$r") || die
-                cons "$v" "$rr"
-            else
-                null
-            fi
-        }
+
+  does not help either: `local` still clobbers the exception
+  here. Bash is just that bad. (Of course this has nothing to do with
+  *functional-shell* or functional programming; it's just that any
+  sane programming language would not ignore errors, so we'll want to
+  carry over that expectation here, too.)
 
 * The above actually clobbers exceptions happening in `nullP`. This
   could be remedied by changing predicates to return booleans via
@@ -248,7 +239,8 @@ Scheme or other Lisps):
             set -euo pipefail
             local fn="$1"
             local l="$2"
-            local t=$(nullP "$l") || die
+            local t
+            t=$(nullP "$l")
             if is_true "$t"; then
                 ...
 

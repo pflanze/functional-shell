@@ -9,9 +9,6 @@ if [ $# -ne 2 ]; then
     exit 1
 fi
 
-source functional-shell-mem.bash
-
-
 # iterative and tail-call optimized (but slow :) )
 
 l=$1

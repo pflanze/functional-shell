@@ -36,17 +36,22 @@ _counter_ref () {
 _inc_counter () {
     set -euo pipefail
     local env="$1"
-    local v=$(unbox "$env") || die
-    local v2=$(inc "$v") || die
+    local v
+    v=$(unbox "$env")
+    local v2
+    v2=$(inc "$v")
     set_box "$env" "$v2"
 }
 
 counter () {
     set -euo pipefail
     local n="$1"
-    local b=$(box "$n") || die
-    local ref=$(closure _counter_ref "$b") || die
-    local inc=$(closure _inc_counter "$b") || die
+    local b
+    b=$(box "$n")
+    local ref
+    ref=$(closure _counter_ref "$b")
+    local inc
+    inc=$(closure _inc_counter "$b")
     list "$ref" "$inc"
 }
 

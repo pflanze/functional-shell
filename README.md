@@ -5,7 +5,18 @@ objects are stored in files to make them shareable across processes,
 plus a library of functions for working with them with functional
 principles.
 
-This is not meant for production use, but for learning/illustration.
+This is not really meant for production use, but for
+learning/illustration. It is *way* slower and more obfuscated than other
+functional language implementations. It aims to be correct / precise /
+safe, though. (It isn't finished either, see Todo.)
+
+This (currently) uses Bash. Most functions / commands are implemented
+as bash scripts though (as opposed to bash functions sourced as a
+library), thus could be reimplemented in C instead and be used by any
+other shell, too. (Alternatively, they could all be (also?) offered as
+bash functions in a source'able file to reduce the fork/exec overhead;
+although see 'Tail-call optimization' for a problem that would arise
+with a pure source'ing approach.)
 
 
 ## Usage
@@ -18,7 +29,8 @@ This is not meant for production use, but for learning/illustration.
 
 4. `test/str`; `test/lists`
 
-5. read the code of the test scripts, then do your own experiments...
+5. read the code of the scripts in the [[test]] directory, then do
+   your own experiments...
 
 
 ## Memory model
@@ -42,7 +54,8 @@ Currently implemented types:
     box      allocated  a mutable box         box          unbox, box_set
 
 Each type has a type predicate which is named after the type with a
-trailing 'P'.
+trailing 'P'. (E.g. `pairP "$v"` will be true iff $v refers to a pair
+object.)
 
 ### Memory allocation
 
@@ -64,6 +77,8 @@ programs that need optimized tail-calls would either have to use
 trampolines, or more idiomatically, call the target 'function' as an
 external program using 'exec' (which is more uniform, too, but of
 course slower.)
+
+For an example, see [[system/list_ref]].
 
 ## Lambda and closures
 
@@ -87,7 +102,8 @@ So, the solution offered here is the following:
 
 * There's also a `code` data type, that only contains code and no env;
   its purpose is (together with the `closure` type) to offer a super
-  type (a "callable") that generic functions can simply `call`
+  type (a "callable") that generic functions can simply `call`.
+  (Example: `map` usage in [[test/lists]].)
 
 * So, to create a closure instance, run e.g.:
 
@@ -127,7 +143,7 @@ See [[test/boxes]] for an example involving closures.
 ## Problems
 
 Problems compared to some other "real" programming languages (like
-actual Scheme or other Lisps):
+Scheme or other Lisps):
 
 * Bash offers no safe way around using double quotes around all
   variable references (except in assignment context (is this actually
@@ -221,7 +237,7 @@ actual Scheme or other Lisps):
 
 ## Todo
 
-* implement map, filter: this is a good exercise
+* implement filter: this is a good exercise
 
 * implement delay, force, lazy list (stream) library
 

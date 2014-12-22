@@ -23,14 +23,30 @@ with a pure source'ing approach.)
 
 1. `export PATH="<path-to>/functional-shell/system:$PATH"`
 
-2. `functional-shell-init`
+1. set MEM to a place to put the object storage, e.g.
 
-3. `nohup id-server & disown`
+        export MEM=~/.functional-shell
 
-4. `test/str`; `test/lists`
+2. only once to create the object storage: 
 
-5. read the code of the scripts in the [test](test)
-   directory, then do your own experiments...
+        functional-shell-init
+
+3. only once after booting: 
+
+        nohup id-server & disown
+
+   (or run in a separate terminal to see error messages as they turn
+   up)
+
+4. Test the system:
+
+        test/str
+        test/call
+        test/lists
+        test/boxes
+
+5. read the code of the scripts in the [test](test) directory (and the
+   text below), do your own experiments...
 
 
 ## Memory model

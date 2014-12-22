@@ -6,9 +6,10 @@ plus a library of functions for working with them with functional
 principles.
 
 This is not really meant for production use, but for
-learning/illustration. It is *way* slower and more obfuscated than other
-functional language implementations. It aims to be correct / precise /
-safe, though. (It isn't finished either, see Todo.)
+learning/illustration. It is *way* slower and more obfuscated than
+other functional language implementations. It aims to be correct /
+precise / safe and efficient except for a big constant factor,
+though. (It isn't finished either, see Todo.)
 
 This (currently) uses Bash. Most functions / commands are implemented
 as bash scripts though (as opposed to bash functions sourced as a

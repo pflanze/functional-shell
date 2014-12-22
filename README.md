@@ -201,6 +201,8 @@ Scheme or other Lisps):
             local fn="$1" # XX: is it a good idea to rely on set -u working
             local l="$2"  #     through `local` in the future?
             if nullP "$l"; then
+                null
+            else
                 local a
                 a=$(car "$l")
                 local v
@@ -210,8 +212,6 @@ Scheme or other Lisps):
                 local rr
                 rr=$(map "$fn" "$r")
                 cons "$v" "$rr"
-            else
-                null
             fi
         }
 

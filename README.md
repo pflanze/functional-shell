@@ -258,5 +258,6 @@ Scheme or other Lisps):
 
 * implement delay, force, lazy list (stream) library
 
-* implement garbage collection
+* implement garbage collection (this will make the syntax even uglier
+  since it requires registration of all bindings)
 

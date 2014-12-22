@@ -6,10 +6,14 @@ set -euo pipefail
 # still keep some accidental holes in check:
 IFS=
 
+die () {
+    exit 2
+}
+
 error () {
     set -euo pipefail
     echo "error: $@" >&2
-    exit 2
+    die
 }
 
 warn () {

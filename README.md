@@ -9,15 +9,15 @@ This is not really meant for production use, but for
 learning/illustration. It is *way* slower and more obfuscated than
 other functional language implementations. It aims to be correct /
 precise / safe and efficient except for a big constant factor,
-though. (It isn't finished either, see Todo.)
+though. (But it isn't finished, see Todo.)
 
 This (currently) uses Bash. Most functions / commands are implemented
 as bash scripts though (as opposed to bash functions sourced as a
 library), thus could be reimplemented in C instead and be used by any
-other shell, too. (Alternatively, they could all be (also?) offered as
-bash functions in a source'able file to reduce the fork/exec overhead;
-although see 'Tail-call optimization' for a problem that would arise
-with a pure source'ing approach.)
+other shell, too. (Alternatively, they could all (in addition?) be
+offered as bash functions in a source'able file to reduce the
+fork/exec overhead; although see 'Tail-call optimization' for a
+problem that would arise with a pure source'ing approach.)
 
 
 ## Usage
@@ -63,7 +63,7 @@ passed by reference.
 Currently implemented types:
 
     type     kind       desc                  constructor  accessors
-    -------  ---------  --------------------  -----------  ----------------
+    -------  ---------  --------------------  -----------  -------------------------
     number   immediate  stringified number    number       number-value
     string   allocated  utf8-encoded string   string       string-value, string-path
     pair     allocated  pair of two objects   cons         car, cdr

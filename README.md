@@ -258,6 +258,8 @@ Scheme or other Lisps):
   process RAM by way of ptrace or /proc/$pid/mem for reference
   strings, that should be neat if there's no superfluous retention of
   such strings by bash or malloc, but that latter point may be an
-  issue)
-
+  issue; this would have an issue with references that have been
+  written to pipes but not yet read (and thus are present in a kernel
+  buffer only), but echo and read wrappers could be used to add/remove
+  these values to/from the root set explicitely.)
 

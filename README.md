@@ -2,8 +2,8 @@
 
 This implements an object model where potentially big or mutable
 objects are stored in files to make them shareable across processes,
-plus a library of functions for working with them with functional
-principles.
+plus a library of pure functions (in the mathematical sense,
+implemented as individual scripts) for working with them.
 
 This is not really meant for production use, but for
 learning/illustration. It is *way* slower and more obfuscated than

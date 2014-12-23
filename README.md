@@ -114,8 +114,8 @@ So, the solution offered here is the following:
 
 * There's a `closure` data type, with `code` and `env` fields. `code`
   is a reference to a bash function or executable, `env` can be
-  anything (it's basically like `void*` in C), `list` can be used to
-  bundle multiple values.
+  anything (it's basically like the `void*` argument passed to
+  callbacks in C), `list` can be used to bundle multiple values.
 
 * There's also a `code` data type, that only contains code and no env;
   its purpose is (together with the `closure` type) to offer a super

@@ -216,7 +216,7 @@ Scheme or other Lisps):
         }
 
   (Ok, the `r` intermediate variable could have been saved since
-  there's no possibility for `cdr` to be failing here. But, better be
+  there's no possibility for `cdr` to be failing here. But, rather be
   consistent than smart.)
 
   Note that a style like
@@ -225,9 +225,9 @@ Scheme or other Lisps):
 
   does not help either: `local` still clobbers the exception
   here. Bash is just that bad. (Of course this has nothing to do with
-  *functional-shell* or functional programming; it's just that any
-  sane programming language would not ignore errors, so we'll want to
-  carry over that expectation here, too.)
+  *functional-shell* or functional programming; it's just that if you
+  have an expectation of safety, you don't want programs to continue
+  after running into unhandled errors.)
 
 * The above actually clobbers exceptions happening in `nullP`. This
   could be remedied by changing predicates to return booleans via

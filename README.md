@@ -8,7 +8,8 @@ implemented as individual scripts) for working with them.
 This is not really meant for production use, but for
 learning/illustration. It is *way* slower and more obfuscated than
 other functional language implementations. It aims to be correct /
-precise / safe and efficient except for a big constant factor,
+precise / safe and efficient except for a big constant factor (in time
+and space, compared to other functional language implementations),
 though. (But it isn't finished, see Todo.)
 
 This (currently) uses Bash. Most functions / commands are implemented
